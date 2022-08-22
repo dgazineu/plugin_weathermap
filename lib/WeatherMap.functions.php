@@ -850,7 +850,7 @@ function calc_arrowsize($width,&$map,$linkname)
 }
 
 function draw_straight($image, &$curvepoints, $widths, $outlinecolour, $fillcolours, $linkname, &$map,
-	$q2_percent=50, $unidirectional=FALSE)
+	$q2_percent=50, $unidirectional=FALSE, $problem=FALSE)
 {
 	$totaldistance = $curvepoints[count($curvepoints)-1][DISTANCE];
 		
@@ -1151,7 +1151,8 @@ function draw_straight($image, &$curvepoints, $widths, $outlinecolour, $fillcolo
 
 			if (!is_null($fillcolours[$dir]))
 			{
-				wimagefilledpolygon($image, $finalpoints, count($finalpoints) / 2, $arrowsettings[4]); 
+				wimagefilledpolygon($image, $finalpoints, count($finalpoints) / 2, $arrowsettings[4]);
+				if ($problem==TRUE) wm_draw_marker_x($image, $map->selected, $halfway_x, $halfway_y, 8);
 			}
 			else
 			{
@@ -1181,7 +1182,7 @@ function draw_straight($image, &$curvepoints, $widths, $outlinecolour, $fillcolo
 //    outlinecolour is a GD colour reference
 //    fillcolours is an array of two more colour references, one for the out, and one for the in spans
 function draw_curve($image, &$curvepoints, $widths, $outlinecolour, $fillcolours, $linkname, &$map,
-	$q2_percent=50, $unidirectional=FALSE)
+	$q2_percent=50, $unidirectional=FALSE, $problem=FALSE)
 {
 	// now we have a 'spine' - all the central points for this curve.
 	// time to flesh it out to the right width, and figure out where to draw arrows and bandwidth boxes...
@@ -1969,6 +1970,55 @@ function wm_draw_marker_diamond($im, $col, $x, $y, $size=10)
 
 	imagepolygon($im, $points, $num_points, $col);
 }
+
+function wm_draw_marker_x($im, $col, $x, $y, $size=10)
+{
+        $offset_x = 1;
+        $offset_y = -1;
+
+        $points = array();
+
+        $points []= $x-$size+$offset_x+1;
+        $points []= $y-$size+$offset_y-1;
+
+        $points []= $x-$size+$offset_x-1;
+        $points []= $y-$size+$offset_y+1;
+
+
+        $points []= $x+$size+$offset_x-1;
+        $points []= $y+$size+$offset_y+1;
+
+
+        $points []= $x+$size+$offset_x+1;
+        $points []= $y+$size+$offset_y-1;
+
+
+        $num_points = sizeof($points)/2;
+
+        imagefilledpolygon($im, $points, $num_points, $col);
+
+        $points = array();
+
+
+        $points []= $x+$size+$offset_x-1;
+        $points []= $y-$size+$offset_y-1;
+
+        $points []= $x+$size+$offset_x+1;
+        $points []= $y-$size+$offset_y+1;
+
+        $points []= $x-$size+$offset_x+1;
+        $points []= $y+$size+$offset_y+1;
+
+        $points []= $x-$size+$offset_x-1;
+        $points []= $y+$size+$offset_y-1;
+
+
+        $num_points = sizeof($points)/2;
+
+        imagefilledpolygon($im, $points, $num_points, $col);
+
+}
+
 
 function wm_draw_marker_box($im, $col, $x, $y, $size=10)
 {

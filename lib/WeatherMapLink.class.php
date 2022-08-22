@@ -366,6 +366,12 @@ class WeatherMapLink extends WeatherMapItem
 		
 	//	$map->links[$this->name]->inscalekey = $link_in_scalekey;
 	//	$map->links[$this->name]->outscalekey = $link_out_scalekey;
+
+                $problem = FALSE;
+                if (sizeof($this->targets)!=0) // Target exists
+                   if (($this->colours[IN]->r==192)&&($this->colours[IN]->g==192)&&($this->colours[IN]->b==192)&&($this->colours[OUT]->r==192)&&($this->colours[OUT]->g==192)&&($this->colours[OUT]->b==192)) // All colours gray
+                      $problem = TRUE;
+
 		
 		$link_width=$this->width;
 		// these will replace the one above, ultimately.
@@ -393,7 +399,7 @@ class WeatherMapLink extends WeatherMapItem
 			// then draw the "curve" itself
 			draw_straight($im, $this->curvepoints,
 				array($link_in_width,$link_out_width), $outline_colour, array($gd_in_colour, $gd_out_colour),
-				$this->name, $map, $this->splitpos, ($this->linkstyle=='oneway'?TRUE:FALSE) );
+				$this->name, $map, $this->splitpos, ($this->linkstyle=='oneway'?TRUE:FALSE), $problem );
 		}
 		elseif($this->viastyle=='curved')
 		{
@@ -403,7 +409,7 @@ class WeatherMapLink extends WeatherMapItem
 			// then draw the curve itself
 			draw_curve($im, $this->curvepoints,
 				array($link_in_width,$link_out_width), $outline_colour, array($gd_in_colour, $gd_out_colour),
-				$this->name, $map, $this->splitpos, ($this->linkstyle=='oneway'?TRUE:FALSE) );
+				$this->name, $map, $this->splitpos, ($this->linkstyle=='oneway'?TRUE:FALSE), $problem );
 		}
 
 		
