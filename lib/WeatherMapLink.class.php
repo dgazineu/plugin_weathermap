@@ -368,9 +368,27 @@ class WeatherMapLink extends WeatherMapItem
 	//	$map->links[$this->name]->outscalekey = $link_out_scalekey;
 
                 $problem = FALSE;
-                if (sizeof($this->targets)!=0) // Target exists
-                   if (($this->colours[IN]->r==192)&&($this->colours[IN]->g==192)&&($this->colours[IN]->b==192)&&($this->colours[OUT]->r==192)&&($this->colours[OUT]->g==192)&&($this->colours[OUT]->b==192)) // All colours gray
-                      $problem = TRUE;
+		if (sizeof($this->targets)!=0){
+			if ((!function_exists('show_editor_startpage')) &&
+				isset($map->colours['DEFAULT']['0_0']['red1']) && isset($map->colours['DEFAULT']['0_0']['green1']) &&  isset($map->colours['DEFAULT']['0_0']['blue1'])){// DEFAULT SCALE 0 0 && Not in Editor
+				$zero_red = $map->colours['DEFAULT']['0_0']['red1'];
+				$zero_green = $map->colours['DEFAULT']['0_0']['green1'];
+				$zero_blue = $map->colours['DEFAULT']['0_0']['blue1'];
+			}
+			else{
+				$zero_red = 192;
+				$zero_green = 192;
+				$zero_blue = 192;
+			}
+			if (($this->colours[IN]->r==$zero_red)
+				&&($this->colours[IN]->g==$zero_green)
+				&&($this->colours[IN]->b==$zero_blue)
+				&&($this->colours[OUT]->r==$zero_red)
+				&&($this->colours[OUT]->g==$zero_green)
+				&&($this->colours[OUT]->b==$zero_blue)){ // All colours for zero traffic
+			   $problem = TRUE;
+		   	}
+		}
 
 		
 		$link_width=$this->width;
