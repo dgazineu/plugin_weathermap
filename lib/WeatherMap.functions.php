@@ -1305,7 +1305,8 @@ function draw_curve($image, &$curvepoints, $widths, $outlinecolour, $fillcolours
 
 		if (!is_null($fillcolours[$arrayindex]))
 		{
-			wimagefilledpolygon($image, $there_points, count($there_points) / 2, $arrowsettings[$dir][4]); 
+			wimagefilledpolygon($image, $there_points, count($there_points) / 2, $arrowsettings[$dir][4]);
+			if ($problem==TRUE) wm_draw_marker_x($image, $map->selected, $halfway_x, $halfway_y, 8);
 		}
 		else
 		{
